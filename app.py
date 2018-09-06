@@ -1,10 +1,11 @@
 from flask import Flask, render_template, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
-import os
+from os import listdir, os
+
 
 
 ALLOWED_EXTENSIONS = set(['csv', 'xls', 'xlsx'])
-
+UPLOAD_FOLDER = 'C:\\Uploads\\'
 
 app = Flask(__name__)
 
@@ -16,19 +17,26 @@ def index(): # Function for Index, will return Index
     return render_template('home.html')
 
 
+
+
 @app.route('/submit/<string:process>')
 def article(process):
-    return render_template('submit.html', process = process.replace("_", " "))
+    fileList = []
+    if process == "Extend_Demands":
+        fileList = listdir(UPLOAD_FOLDER + "Extend_Demands\\Processed\\")
+    elif process == "Pop_Mailers":
+        fileList = listdir(UPLOAD_FOLDER + "Pop_Mailers\\Processed\\")
+    elif process == "Edit_Seats":
+        fileList = listdir(UPLOAD_FOLDER + "Edit_Seats\\Processed\\")
+    return render_template('submit.html', process = process.replace("_", " "), fileList = fileList)
 
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 @app.route('/uploader', methods=['GET', 'POST'])
 def upload_file():
-    UPLOAD_FOLDER = 'C:\\Uploads\\'
     if request.method == 'POST':
         # check if the post request has the file part
         if 'upload' not in request.files:
@@ -87,3 +95,5 @@ if __name__ == '__main__':
 # next
 # p variavel
 # pp variavel
+
+#f for f in listdir(directory)
