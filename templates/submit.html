@@ -28,6 +28,24 @@
                 })
             </script>
         </form>
+        <br>
+        <br>
+        {% if fileList %}
+        <h1>To Process Queue</h1>
+        <ol class="list-group">
+            
+                {% for file in fileList %}
+                    <li class= "list-group-item"><a href="#">{{file}}</a></li>
+                {% endfor %}
+            
+        </ol>
+        {% else %}
+
+        <h1>No files on queue</h1>
+
+        {% endif %}
+        
+
     </section>
 </div>
 

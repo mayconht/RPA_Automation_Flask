@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from os import listdir, os
+import os 
+from os import listdir
 
 
 
@@ -23,17 +24,18 @@ def index(): # Function for Index, will return Index
 def article(process):
     fileList = []
     if process == "Extend_Demands":
-        fileList = listdir(UPLOAD_FOLDER + "Extend_Demands\\Processed\\")
+        fileList = listdir(UPLOAD_FOLDER + "Extend_Demands\\ToProcess\\")
     elif process == "Pop_Mailers":
-        fileList = listdir(UPLOAD_FOLDER + "Pop_Mailers\\Processed\\")
+        fileList = listdir(UPLOAD_FOLDER + "Pop_Mailers\\ToProcess\\")
     elif process == "Edit_Seats":
-        fileList = listdir(UPLOAD_FOLDER + "Edit_Seats\\Processed\\")
+        fileList = listdir(UPLOAD_FOLDER + "Edit_Seats\\ToProcess\\")
+    
+    print(fileList)
     return render_template('submit.html', process = process.replace("_", " "), fileList = fileList)
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/uploader', methods=['GET', 'POST'])
 def upload_file():
@@ -51,16 +53,16 @@ def upload_file():
             job = request.referrer.split('/')
             print(job[-1])
             if "Extend_Demands" == job[-1]:
-                UPLOAD_FOLDER = UPLOAD_FOLDER + "Extend_Demands\\ToProcess\\"
+                upload_folder = UPLOAD_FOLDER + "Extend_Demands\\ToProcess\\"
             elif "Pop_Mailers" == job[-1]:
-                UPLOAD_FOLDER = UPLOAD_FOLDER + "Pop_Mailers\\ToProcess\\"
+                upload_folder = UPLOAD_FOLDER + "Pop_Mailers\\ToProcess\\"
             elif "Edit_Seats" == job[-1]:
-                UPLOAD_FOLDER = UPLOAD_FOLDER + "Edit_Seats\\ToProcess\\"
+                upload_folder = UPLOAD_FOLDER + "Edit_Seats\\ToProcess\\"
             else:
                 flash('Please clean your cache and try again', 'danger')
                 return redirect(url_for('index'))
 
-            app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+            app.config['UPLOAD_FOLDER'] = upload_folder
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             flash('File Uploaded', 'success')
             
