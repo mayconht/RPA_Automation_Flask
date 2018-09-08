@@ -18,14 +18,14 @@
                 $('#inputGroup').on('change', function () {
                     //get the file name
                     var fileName = $(this).val().replace("C:\\fakepath\\", "");
-                    var n = fileName.includes("xls")
-                    if ($(this).val() == "" || $(this).val() == "Choose file" || true != n) {
-                        alert("please, upload a XLS or XLSX file.");
-                    } else {
+                    // var n = fileName.includes("xls")
+                    // if ($(this).val() == "" || $(this).val() == "Choose file" || true != n) {
+                    //     alert("please, upload a XLS or XLSX file.");
+                    // } else {
                         document.getElementById("btn").disabled = false;
                         $(this).next('.custom-file-label').html(fileName);
                     }
-                })
+                )
             </script>
         </form>
         <br>
@@ -44,5 +44,5 @@
 
     </section>
 </div>
-
+<meta http-equiv="refresh" content="60">   
 {% endblock %}

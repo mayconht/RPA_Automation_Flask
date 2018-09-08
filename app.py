@@ -1,9 +1,8 @@
 from flask import Flask, render_template, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import os 
+import validation
 from os import listdir
-
-
 
 ALLOWED_EXTENSIONS = set(['csv', 'xls', 'xlsx'])
 UPLOAD_FOLDER = 'C:\\Uploads\\'
@@ -12,13 +11,9 @@ app = Flask(__name__)
 
 app.debug = True 
 
-
 @app.route('/') # receive the request from user, similar to annotation java
 def index(): # Function for Index, will return Index
     return render_template('home.html')
-
-
-
 
 @app.route('/submit/<string:process>')
 def article(process):
@@ -32,7 +27,6 @@ def article(process):
     
     print(fileList)
     return render_template('submit.html', process = process.replace("_", " "), fileList = fileList)
-
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -48,7 +42,7 @@ def upload_file():
         if file.filename == '':
             flash('No selected file', 'danger')
             return redirect(url_for('index'))
-        if file and allowed_file(file.filename):
+        if file:
             filename = secure_filename(file.filename)
             job = request.referrer.split('/')
             print(job[-1])
@@ -64,10 +58,15 @@ def upload_file():
 
             app.config['UPLOAD_FOLDER'] = upload_folder
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('File Uploaded', 'success')
+            validator = validation.__validator__(upload_folder + filename)
+
+            if validator[0]:
+                flash('File Uploaded', 'success')
+            else:
+                flash(validator[1], 'danger')
+                os.remove(upload_folder + filename)
             
             return redirect(url_for('index'))
-
 
 @app.context_processor
 def override_url_for():
