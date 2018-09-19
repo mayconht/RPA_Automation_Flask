@@ -16,7 +16,7 @@ def __popmailers__(file):
         return problems
     else:
         problems.append(False)
-        problems.append("File extension not supported for popmailers, please upload a csv file")
+        problems.append("File extension not supported on popmailers, please upload a csv file")
         return problems
 
 def __extenddemands__(file):
@@ -26,7 +26,7 @@ def __extenddemands__(file):
         return problems
     else:
         problems.append(False)
-        problems.append("File extension not supported for Extend Demands, please upload a csv file")
+        problems.append("File extension not supported on Extend Demands, please upload a csv file")
         return problems
 
 def  __editseats__(file):
@@ -36,5 +36,5 @@ def  __editseats__(file):
         return problems
     else:
         problems.append(False)
-        problems.append("File extension not supported for Edit Seats, please upload a xls or xlsx file")
+        problems.append("File extension not supported on Edit Seats, please upload a xls or xlsx file")
         return problems
